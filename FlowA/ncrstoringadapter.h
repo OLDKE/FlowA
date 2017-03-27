@@ -2,11 +2,12 @@
 #define __NCRSTORINGADAPTER_H__
 
 #include "storingadapter.h"
+#include "regparse.h"
 
-class NCRStoringAdapter :public StoringAdapter
+class NCRStoringAdapter :public StoringAdapter, public RegParse
 {
 public:
-	virtual bool storing() override;
+	virtual bool storing(FlowaFile* file, wchar_t* context) override;
 };
 
 #endif

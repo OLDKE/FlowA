@@ -170,12 +170,8 @@ int CFlowaDlg::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CDialog::OnCreate(lpCreateStruct) == -1)
 		return -1;
 
-	m_trayIcon.SetNotificationWnd(this, WM_USER+0);
-
-	//m_trayIcon.SetIcon(IDI_ICON_NT);
+	m_trayIcon.SetNotificationWnd(this, WM_USER + 0);
 	m_trayIcon.SetIcon(m_hIcon, _T("金融自助设备数据采集客户端"));
-
-
 	return 0;
 }
 
@@ -207,15 +203,13 @@ void CFlowaDlg::OnExit()
 {
 	m_trayIcon.DeleteIcon();
 	KillTimer(1);
+	KillTimer(2);
 	OnOK();
 }
 
 void CFlowaDlg::OnDestroy()
 {
 	CDialog::OnDestroy();
-	
-//	delete m_trace;
-//	delete m_trayIcon;
 }
 
 bool CFlowaDlg::initFlowa()
@@ -261,45 +255,51 @@ bool CFlowaDlg::logAnalysis()
 {
 	CString msg;
 	CTime time = CTime::GetCurrentTime();
-	msg.Format(_T("------------------------------ANALYSIS BEGIN AT TIME[%s]------------------------------"), time.Format(_T("%Y/%m/%d %H:%M:%S")));
+	msg.Format(_T("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ANALYSIS BEGIN AT TIME[%s]>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"), time.Format(_T("%Y/%m/%d %H:%M:%S")));
 	logInfo(msg.GetBuffer());
 	msg.ReleaseBuffer();
-
-	//加载配置
-	if (!loadConfig())
-		return false;
 	
 	//分析注册表配置当中的文件
 	for (int i = 0; i < m_fileCount; ++i)
 	{
-		wchar_t context[8192]; //用来保存读取到的文件内容
-		ZeroMemory(context, sizeof(context));
-		msg.Format(_T("业务类型[%s]"), m_flowaFile[i].businessType);
-		logInfo(msg.GetBuffer());
-		//读取日志
-		if (!m_readAdapter->read(m_flowaFile[i], context))
-			return false;
-		//格式化内容
-		if (!m_formatAdapter->format())
-			return false;
-		//处理读取的内容
-		if (!m_contentAdapter->format())
-			return false;
-		//存储读取的内容
-		if (!m_storingAdapter->storing())
-			return false;
+		try
+		{
+			wchar_t context[CHUNKSIZE + 1]; //用来保存读取到的文件内容
+			ZeroMemory(context, sizeof(context));
+			msg.Format(_T("业务类型[%s]"), m_flowaFile[i].businessType);
+			logInfo(msg.GetBuffer());
+			//读取日志
+			if (!m_readAdapter->read(&m_flowaFile[i], context))
+				continue;
+			wchar_t fcontext[CHUNKSIZE + 1]; //用来存放格式化后的数据
+			ZeroMemory(fcontext, sizeof(fcontext));
+			//格式化内容
+			if (!m_formatAdapter->format(&m_flowaFile[i], context, fcontext))
+				continue;
+			wchar_t ccontext[CHUNKSIZE + 1]; //用来存放格式化后的数据
+			ZeroMemory(ccontext, sizeof(ccontext));
+			//处理读取的内容
+			if (!m_contentAdapter->format(&m_flowaFile[i], fcontext, ccontext))
+				continue;
+			//存储读取的内容
+			if (!m_storingAdapter->storing(&m_flowaFile[i], ccontext))
+				continue;
+		}
+		catch (...)
+		{
+			msg.Format(_T("捕获到未知异常，不做处理"));
+			logInfo(msg.GetBuffer());
+			msg.ReleaseBuffer();
+		}
+		
 	}
+	msg.Format(_T("<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<ANALYSIS END AT TIME[%s]>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"), time.Format(_T("%Y/%m/%d %H:%M:%S")));
+	logInfo(msg.GetBuffer());
 	return true;
 }
-
+//此定时回调，用来定时检测加密报文所需的密钥,并对密钥做相应处理后使用加密
 bool CFlowaDlg::keyAnalysis()
 {
-	//test
-	wchar_t msg[8049];
-	openReg(_T("SOFTWARE\\EBRING\\Agent\\Config\\FLOWA\\MESSAGES"));
-	ZeroMemory(msg, sizeof(msg));
-	readReg(_T("DEVSTATUS"), msg);
-	logInfo(msg);
-	closeReg();
+	
 	return true;
 }

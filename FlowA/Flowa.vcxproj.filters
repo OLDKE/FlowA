@@ -66,6 +66,15 @@
     <ClCompile Include="normalreader.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="regexpase.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="codec.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="serialnum.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Flowa.h">
@@ -138,6 +147,15 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="normalreader.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="regexparse.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="codec.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="serialnum.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

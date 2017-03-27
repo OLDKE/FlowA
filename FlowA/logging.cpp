@@ -1,5 +1,6 @@
 #include "logging.h"
 #include "stdafx.h"
+#include "typedefine.h"
 
 Logging::Logging()
 {
@@ -25,7 +26,7 @@ void Logging::log(int iLogLevel, wchar_t* pszContent, wchar_t* model)
 {
 	USES_CONVERSION;
 	FILE  *fp = NULL;
-	wchar_t  szLogContent[2048] = { 0 };
+	wchar_t  szLogContent[CHUNKSIZE + 1] = { 0 };
 	wchar_t  szTimeStr[128] = { 0 };
 
 
@@ -34,7 +35,7 @@ void Logging::log(int iLogLevel, wchar_t* pszContent, wchar_t* model)
 		return;
 	}
 
-	wchar_t message[2048] = { 0x00 };
+	wchar_t message[CHUNKSIZE+1] = { 0x00 };
 	StrCpyW(message, pszContent);
 	// 过滤日志等级
 	if (iLogLevel > m_iLogLevel)
@@ -57,7 +58,7 @@ void Logging::log(int iLogLevel, wchar_t* pszContent, wchar_t* model)
 
 	// 写入日志内容
 	// 在原内容中添加日志等级标识
-	wnsprintf(szLogContent, sizeof(szLogContent) - 1, A2T("[%s][%s]%s\n"), model, logLevel(iLogLevel), message);
+	wnsprintf(szLogContent, sizeof(szLogContent) - 1, A2T("[%s][%s]%s\n\n"), model, logLevel(iLogLevel), message);
 	fputs(T2A(szLogContent), fp);
 
 	fflush(fp);     // 刷新文件
@@ -116,7 +117,7 @@ void Logging::now(wchar_t* pszTimeStr)
 
 	USES_CONVERSION;
 	GetLocalTime(&tSysTime);
-	wsprintf(pszTimeStr, A2T("[%04d.%02d.%02d %02d:%02d:%02d.%03d]"),
+	wsprintf(pszTimeStr, A2T("=============================================[%04d/%02d/%02d %02d:%02d:%02d.%03d]"),
 		tSysTime.wYear, tSysTime.wMonth, tSysTime.wDay,
 		tSysTime.wHour, tSysTime.wMinute, tSysTime.wSecond,
 		tSysTime.wMilliseconds);
@@ -127,7 +128,7 @@ void Logging::logDebug(wchar_t* pszContent, wchar_t *model)
 {
 	USES_CONVERSION;
 	FILE  *fp = NULL;
-	wchar_t  szLogContent[2048] = { 0 };
+	wchar_t  szLogContent[CHUNKSIZE + 1] = { 0 };
 	wchar_t  szTimeStr[128] = { 0 };
 	
 	if (NULL == model)
@@ -138,7 +139,7 @@ void Logging::logDebug(wchar_t* pszContent, wchar_t *model)
 		return;
 	}
 
-	wchar_t message[2048] = { 0x00 };
+	wchar_t message[CHUNKSIZE+1] = { 0x00 };
 	StrCpyW(message, pszContent);
 	// 过滤日志等级
 	if (LOG_DEBUG > m_iLogLevel)
@@ -177,7 +178,7 @@ void Logging::logInfo(wchar_t* pszContent, wchar_t *model)
 {
 	USES_CONVERSION;
 	FILE  *fp = NULL;
-	wchar_t  szLogContent[2048] = { 0 };
+	wchar_t  szLogContent[CHUNKSIZE+1] = { 0 };
 	wchar_t  szTimeStr[128] = { 0 };
 
 	if (NULL == model)
@@ -188,7 +189,7 @@ void Logging::logInfo(wchar_t* pszContent, wchar_t *model)
 		return;
 	}
 
-	wchar_t message[2048];
+	wchar_t message[CHUNKSIZE+1];
 	StrCpyW(message, pszContent);
 	// 过滤日志等级
 	if (LOG_INFO > m_iLogLevel)
@@ -211,7 +212,7 @@ void Logging::logInfo(wchar_t* pszContent, wchar_t *model)
 
 	// 写入日志内容
 	// 在原内容中添加日志等级标识
-	wnsprintf(szLogContent, sizeof(szLogContent) - 1, A2T("[%s][%s]%s\n"), model, logLevel(LOG_INFO), message);
+	wnsprintf(szLogContent, sizeof(szLogContent) - 1, A2T("[%s][%s]=============================================\n%s\n"), model, logLevel(LOG_INFO), message);
 	fputs(T2A(szLogContent), fp);
 
 	fflush(fp);     // 刷新文件
@@ -225,7 +226,7 @@ void Logging::logError(wchar_t* pszContent, wchar_t *model)
 {
 	USES_CONVERSION;
 	FILE  *fp = NULL;
-	wchar_t  szLogContent[2048] = { 0 };
+	wchar_t  szLogContent[CHUNKSIZE + 1] = { 0 };
 	wchar_t  szTimeStr[128] = { 0 };
 
 	if (NULL == model)
@@ -236,7 +237,7 @@ void Logging::logError(wchar_t* pszContent, wchar_t *model)
 		return;
 	}
 
-	wchar_t message[2048] = { 0x00 };
+	wchar_t message[CHUNKSIZE+1] = { 0x00 };
 	StrCpyW(message, pszContent);
 	// 过滤日志等级
 	if (LOG_ERROR > m_iLogLevel)

@@ -46,7 +46,6 @@
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
     <IntDir>$(Configuration)\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>C:\Users\Administrator\Desktop\Agent\任康\Flowa-master\Flowa-master\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
@@ -68,7 +67,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-      <AdditionalIncludeDirectories>C:\Users\Jenne\Documents\GitHub\Flowa\include\zlib;C:\Users\Jenne\Documents\GitHub\Flowa\include\openssl;C:\Users\Jenne\Documents\GitHub\Flowa\include\libxml;C:\Users\Jenne\Documents\GitHub\Flowa\include\iconv;C:\Users\Jenne\Documents\GitHub\Flowa\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Documents\GitHub\FlowA\FlowA\include\libxml;D:\Documents\GitHub\FlowA\FlowA\include\zlib;D:\Documents\GitHub\FlowA\FlowA\include\openssl;D:\Documents\GitHub\FlowA\FlowA\include\iconv;D:\Documents\GitHub\FlowA\FlowA\include;D:\boost_1_63_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -80,6 +79,7 @@
       <SubSystem>Windows</SubSystem>
       <TargetMachine>MachineX86</TargetMachine>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalLibraryDirectories>D:\boost_1_63_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -114,6 +114,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="adapter.cpp" />
+    <ClCompile Include="codec.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="fileparse.cpp" />
     <ClCompile Include="Flowa.cpp" />
@@ -125,7 +126,9 @@
     <ClCompile Include="ncrstoringadapter.cpp" />
     <ClCompile Include="normalreader.cpp" />
     <ClCompile Include="reader.cpp" />
+    <ClCompile Include="regexpase.cpp" />
     <ClCompile Include="regparse.cpp" />
+    <ClCompile Include="serialnum.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -136,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="adapter.h" />
+    <ClInclude Include="codec.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="contentadapter.h" />
     <ClInclude Include="fileparse.h" />
@@ -150,8 +154,10 @@
     <ClInclude Include="normalreader.h" />
     <ClInclude Include="readadapter.h" />
     <ClInclude Include="reader.h" />
+    <ClInclude Include="regexparse.h" />
     <ClInclude Include="regparse.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="serialnum.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="storingadapter.h" />
     <ClInclude Include="Subclass.h" />

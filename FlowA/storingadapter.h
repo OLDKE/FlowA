@@ -6,7 +6,7 @@
 class StoringAdapter
 {
 public:
-	virtual bool storing()=0;
+	virtual bool storing(FlowaFile* file, wchar_t *context)=0;
 };
 
 #endif

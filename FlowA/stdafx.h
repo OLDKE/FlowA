@@ -39,7 +39,7 @@
 
 
 // 自定义头文件
-
+#include "typedefine.h"
 
 
 #ifdef _UNICODE

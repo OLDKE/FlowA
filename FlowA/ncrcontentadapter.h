@@ -3,11 +3,12 @@
 
 #include "contentadapter.h"
 
+class FlowaFile;
 class NCRContentAdapter :public ContentAdapter
 {
 public:
 	NCRContentAdapter();
-	virtual bool format()override;
+	virtual bool format(FlowaFile* file, wchar_t* context, wchar_t* out)override;
 };
 
 #endif

@@ -12,7 +12,7 @@ class NormalReader :public Reader
 {
 public:
 	NormalReader() :Reader(){};
-	virtual ~NormalReader(){};
+	virtual ~NormalReader();
 public:
 	/*
 	说明：	一个用来读取普通文件的读取器
@@ -20,9 +20,9 @@ public:
 	出参：	context 保存读取到的文本内容
 	返回值：	true 成功 false 失败
 	*/
-	virtual bool read(FlowaFile file, wchar_t* context) override;
-private:
-	bool fileProc(FlowaFile file, wchar_t*context);
+	virtual bool read(FlowaFile* file, wchar_t* context) override;
+protected:
+	bool fileProc(FlowaFile* file, wchar_t*context);
 };
 
 #endif

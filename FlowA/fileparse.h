@@ -19,9 +19,8 @@ public:
 	如果需要驱动器，所在目录，文件扩展名等可以在此函数内部直接获取
 	*/
 	void getFileName(wchar_t* filepath, wchar_t* filename);
-
-	//读取文件
-	
+	//判断文件是否存在
+	bool isFileExists(wchar_t* filepath);
 };
 
 #endif

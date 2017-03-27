@@ -6,8 +6,6 @@
 说明：一个用来定义文件读取接口的基类
 */
 
-#include <regex>
-
 class FlowaFile;
 class ReadAdapter
 {
@@ -18,7 +16,7 @@ public:
 	参数：	出参 context  读取到的文本字符串
 	返回值：	true 成功， false 失败
 	*/
-	virtual bool read(FlowaFile file, wchar_t* context) = 0;
+	virtual bool read(FlowaFile* file, wchar_t* context) = 0;
 	/*
 	说明:	从读取的内容中获取指定模式的块
 	参数：	入参 file 要读取的文件
@@ -26,11 +24,7 @@ public:
 	参数：	保留 抓取文本块所用的正则表达式
 	返回值：	true 成功， false 失败
 	*/
-	virtual bool getContextBlock(FlowaFile file, wchar_t* context, wchar_t* pattern) = 0;
-
-protected:
-	//用来解析文件的正则对象
-	std::regex re;
+	virtual bool getContextBlock(FlowaFile* file, wchar_t* context, wchar_t* pattern) = 0;
 };
 
 #endif

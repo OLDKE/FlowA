@@ -26,6 +26,10 @@ public:
 	wchar_t* m_fileAbsPath;	//要读取文件全路径的模式
 public:
 	void split(wchar_t* src, wchar_t* delim, wchar_t** res, int ressize);
+	void INIT();
+	void CLEAN();
+
 };
+
 
 #endif

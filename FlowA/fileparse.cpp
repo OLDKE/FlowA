@@ -18,6 +18,7 @@ long long FileParse::getFileSize(wchar_t* filePath)
 		return 0l;
 	if (!GetFileSizeEx(hfile, &ifilesize))
 		return 0l;
+	CloseHandle(hfile);//关闭文件
 	return ifilesize.QuadPart;
 }
 
@@ -38,4 +39,14 @@ void FileParse::getFileName(wchar_t* filepath, wchar_t* filename)
 		);
 	StrCatW(fname, ext);
 	StrCpyW(filename, fname);
+}
+
+bool FileParse::isFileExists(wchar_t* filepath)
+{
+	WIN32_FIND_DATAW fd;
+	HANDLE hFind = FindFirstFile(filepath, &fd);
+	if (INVALID_HANDLE_VALUE == hFind)
+		return false;
+	FindClose(hFind);//记住一定要关闭文件
+	return true;
 }

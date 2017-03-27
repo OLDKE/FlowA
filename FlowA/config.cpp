@@ -16,6 +16,7 @@ Config::Config()
 	closeReg();
 	m_flowaFile = new FlowaFile[m_fileCount]();
 	ZeroMemory(m_flowaFile, sizeof(m_flowaFile));
+	
 }
 
 Config::~Config()
@@ -65,6 +66,8 @@ bool Config::loadConfig()
 		msg.Format(_T("暂时不支持此ATM厂商[%s]"), atmc);
 		logInfo(msg.GetBuffer());
 		msg.ReleaseBuffer();
+		//等待配置正确的厂商参数后，才解析文件,否则就算没有配置也不退出flowa
+		//return false;
 	}
 	closeReg();
 	//获取需要读取的文件配置信息
@@ -91,21 +94,23 @@ bool Config::loadConfig()
 			msg.ReleaseBuffer();
 			split(m_fileconfig, _T("|"), m_config, 6);
 			wchar_t message[1024] = { 0x00 };
-			wsprintfW(message, TEXT("得到文件配置\n业务类型[%s]\n交易类型[%s]\n文件名[%s]\n文件大小[%s]\n上次读取位置[%s]\n循环读取标志[%s]\n"), m_config[0], m_config[1], m_config[2], m_config[3], m_config[4], m_config[5]);
+			wsprintfW(message, TEXT("业务类型[%s]日志解析模式[%s]上次分析文件名[%s]上次文件大小[%s]上次读取位置[%s]循环读取标志[%s]"), m_config[0], m_config[1], m_config[2], m_config[3], m_config[4], m_config[5]);
 			logInfo(message);
 			m_flowaFile[i].index = fileindex;
 			StrCpyW(m_flowaFile[i].businessType, m_config[0]);	//拿到配置里的业务配置
-			StrCpyW(m_flowaFile[i].tranType, m_config[1]);		//交易配置
+			StrCpyW(m_flowaFile[i].pattern, m_config[1]);		//文件解析需要的正则表达式
 			StrCpyW(m_flowaFile[i].last_fileName, m_config[2]);	//上次读过的文件名
 			m_flowaFile[i].last_fileSize = _wtoi(m_config[3]);	//上次文件的大小
 			m_flowaFile[i].lastPos = _wtoi(m_config[4]);		//上次文件的指针位置
 			m_flowaFile[i].isAlwaysReadBegin = _wtoi(m_config[5]);	//文件头重复读标志
+			m_flowaFile[i].sharedPos = -1; //标识共享队列里该文件处理过后数据存放的位置
 			//根据文件配置判断业务类型
 			if ((StrCmpW(m_flowaFile[i].businessType, BTYPE_TRN) != 0) &&
 				(StrCmpW(m_flowaFile[i].businessType, BTYPE_RTC) != 0) &&
 				(StrCmpW(m_flowaFile[i].businessType, BTYPE_STATE) != 0) &&
 				(StrCmpW(m_flowaFile[i].businessType, BTYPE_HARDWARE) != 0) &&
-				(StrCmpW(m_flowaFile[i].businessType, BTYPE_HARDPART) != 0)
+				(StrCmpW(m_flowaFile[i].businessType, BTYPE_HARDPART) != 0) &&
+				(StrCmpW(m_flowaFile[i].businessType, BTYPE_SNR) != 0)
 				)
 			{
 				msg.Format(_T("暂时不支持此业务类型[%s]"), m_flowaFile[i].businessType);
@@ -125,13 +130,10 @@ bool Config::loadConfig()
 				msg.Format(_T("[%s]文件不存在"), m_flowaFile[i].filePath);
 				logInfo(msg.GetBuffer());
 				msg.ReleaseBuffer();
-				return false;
+				//即使要读的文件不存在也不让flowa退出，直到文件出现。
+				//return false;
 			}
 			getFileName(m_flowaFile[i].filePath, m_flowaFile[i].fileName);
-
-			msg.Format(_T("LoadConfig，需要分析的日志文件信息\nFILE%d\n业务类型BizType=[%s]\n交易类型TranType=[%s]\n文件路径FilePath=[%s]"), fileindex, m_flowaFile[i].businessType, m_flowaFile[i].tranType, m_flowaFile[i].filePath);
-			logInfo(msg.GetBuffer());
-			msg.ReleaseBuffer();
 		}
 	}
 	else
@@ -187,3 +189,4 @@ void Config::split(wchar_t* src, wchar_t* delim, wchar_t** res, int ressize)
 		++i;
 	}
 }
+

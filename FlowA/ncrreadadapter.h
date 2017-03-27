@@ -9,8 +9,8 @@ class NCRReadAdapter :public ReadAdapter
 public:
 	NCRReadAdapter();
 	virtual ~NCRReadAdapter();
-	virtual bool read(FlowaFile file, wchar_t* context) override;
-	virtual bool getContextBlock(FlowaFile file, wchar_t* context, wchar_t* pattern) override;
+	virtual bool read(FlowaFile* file, wchar_t* context) override;
+	virtual bool getContextBlock(FlowaFile* file, wchar_t* context, wchar_t* pattern) override;
 protected:
 	Reader *m_reader;
 };
